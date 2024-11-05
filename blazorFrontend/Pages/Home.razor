@@ -1,0 +1,87 @@
+﻿@page "/"
+@inject HttpClient Http
+@using System.Text.Json;
+@inject NavigationManager NavigationManager;
+
+<PageTitle>Home | Student Finder</PageTitle>
+
+<h3 style="text-align: center;">Welcome to the Student Finder</h3>
+
+<div style="display: flex; justify-content: center; align-items: center; padding-top: 100px;">
+    <div class="mb-3 row" style="width: 550px;">
+        <div class="col-sm-12">
+            <input type="text" placeholder="Search Student By Name..." @bind="searchItem" class="form-control"
+                id="searchItem">
+        </div>
+    </div>
+
+    <div class="mb-3 row" style="width: 100px; margin-left: 20px;">
+        <div class="col-sm-10">
+            <button style="width: 100px;" @onclick="OnSearch" type="button" class="btn btn-success">Search</button>
+        </div>
+    </div>
+</div>
+
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+@if (!string.IsNullOrWhiteSpace(searchItem))
+{
+    <div class="list-group" style="width: 650px; padding-top: 50px;">
+        <p style="text-align: center;">Search Results for "@searchItem"</p>
+        @foreach (var user in users)
+        {
+            <a @onclick="() => NavigateToStudentInfo(user.id)" class="list-group-item list-group-item-action" aria-current="true"
+                style="margin-bottom: 20px; border-width: 1px;">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">@user.firstName @user.lastName</h5> <br>
+                    <small>3 days ago</small>
+                </div>
+                <small class="mb-1">@user.programme</small>
+
+            </a>
+        }
+    </div>
+} 
+else
+{
+    <p style="text-align: center;">Search student to display results</p>
+}
+</div>
+
+@code {
+    private string? searchItem;
+    private string getUrl = "http://localhost:5077/api/users/by-name";
+    private List<User> users = new List<User>();
+
+    private class User
+    {
+        public int id { get; set; }
+        public required string firstName { get; set; }
+        public required string lastName { get; set; }
+        public string? email { get; set; }
+        public string? referenceNumber { get; set; }
+        public string? programme { get; set; }
+        public string? userRole { get; set; }
+        public string? gender { get; set; }
+        public DateTime? DateCreated { get; set; } = DateTime.Now;
+    }
+
+    private async Task OnSearch()
+    {
+    try
+    {
+        var response = await Http.GetStringAsync($"{getUrl}/{searchItem}");
+        Console.WriteLine($"Raw JSON response: {response}");
+        users = JsonSerializer.Deserialize<List<User>>(response) ?? new List<User>();
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine($"Search failed {e.Message}");    
+        users = new List<User>(); // Ensure users is never null
+    }
+    }
+    private void NavigateToStudentInfo(int userId)
+        {
+            NavigationManager.NavigateTo($"/student-info/{userId}");
+        }
+
+}

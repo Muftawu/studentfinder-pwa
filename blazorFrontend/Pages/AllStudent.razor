@@ -1,0 +1,79 @@
+﻿@page "/students"
+@inject HttpClient Http
+
+<PageTitle>All Students</PageTitle>
+
+<h3 style="text-align: center; margin-bottom: 50px;">All Student Records</h3>
+
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+
+@if (users == null)
+{
+    <p><em>Loading...</em></p> <br>
+    @* <p><em>Please Navigate to this <a href="/add">Create New Student</a> page to add Students</em></p> *@
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>UserId</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>Email</th>
+                <th>Reference Number</th>
+                <th>Programme</th>
+                <th>UserRole</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                    <td>@user.Email</td>
+                    <td>@user.ReferenceNumber</td>
+                    <td>@user.Programme</td>
+                    <td>@user.UserRole</td>
+                    <td>@user.DateCreated</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div style="padding-top: 20px;">
+        <a href="/add" class="btn btn-success" tabindex="-1" role="button">Add New Student</a>
+    </div>
+}
+</div>
+
+@code {
+    private List<User>? users;
+
+    private class User
+    {
+        public int Id { get; set; }
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
+        public string? Email { get; set; }
+        public string? ReferenceNumber { get; set; }
+        public string? Programme { get; set; }
+        public string? UserRole { get; set; }
+        public DateTime? DateCreated { get; set; } = DateTime.Now;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            users = await Http.GetFromJsonAsync<List<User>>("http://localhost:5077/api/users");
+            Console.WriteLine($"response => {users}");
+        }catch (Exception e)
+        {
+            Console.WriteLine($"error from server => {e.Message}");
+        }
+    }
+}

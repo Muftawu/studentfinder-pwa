@@ -1,0 +1,227 @@
+@page "/student-info/{id:int}"
+
+@inject HttpClient Http
+@using System.Text.Json;
+@inject NavigationManager NavigationManager;
+
+<PageTitle>Student-Info </PageTitle>
+
+@if (user != null)
+{
+    <h3 style="text-align: center;">@user.firstName @user.lastName</h3>
+}
+else
+{
+    <p></p>
+}
+
+<div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-top: 50px;">
+
+    @if (user != null)
+    {
+        <div style="width: 20%; margin-right: 20px;">
+            <div class="card">
+                <img src="./media/profile.jpg" class="card-img-top" alt="...">
+            </div>
+        </div>
+
+        @* delete user *@
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete User</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete <b>"@user.firstName @user.lastName"</b>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" @onclick="onDeleteUser" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        @* update user *@
+        <div class="modal fade" id="updateUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="updateUserLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="updateUserLabel">Update User</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                            <div class="mb-3 row" style="width: 500px;">
+                                <label for="firstName" class="col-sm-12 col-form-label">First Name</label>
+                                <div class="col-sm-10">
+                                    <input type="text" @bind="FirstName" class="form-control" id="firstName">
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row" style="width: 500px;">
+                                <label for="lastName" class="col-sm-12 col-form-label">Last Name</label>
+                                <div class="col-sm-10">
+                                    <input type="text" @bind="LastName" class="form-control" id="lastName">
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row" style="width: 500px;">
+                                <label for="programme" class="col-sm-12 col-form-label">Programme</label>
+                                <div class="col-sm-10">
+                                    <input type="text" @bind="Programme" class="form-control" id="programme">
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row" style="width: 500px;">
+                                <label for="userType" class="col-sm-12 col-form-label">User Role</label>
+                                <div class="col-sm-10">
+                                    <select @bind="UserRole" class="form-select" id="userType"
+                                        aria-label="Default select example">
+                                        <option value="" disabled selected>Select a user type</option>
+                                        <option value="Student">Student</option>
+                                        <option value="Staff">Staff</option>
+                                        <option value="Admin">Admin</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row" style="width: 500px;">
+                                <label for="gender" class="col-sm-12 col-form-label">Gender</label>
+                                <div class="col-sm-10">
+                                    <select @bind="Gender" class="form-select" id="gender"
+                                        aria-label="Default select example">
+                                        <option value="" disabled selected>Select gender</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Understood</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="width: 60%;">
+        <div class="card">
+            <div class="card-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th scope="col">FirstName</th>
+                            <td>@user.firstName</td>
+                        </tr>
+                        <tr>
+                            <th scope="col">Last Name</th>
+                            <td>@user.lastName</td>
+                        </tr>
+                        <tr>
+                            <th scope="col">Reference Number</th>
+                            <td>@user.referenceNumber</td>
+                        </tr>
+                        <tr>
+                            <th scope="col">Email</th>
+                            <td>@user.email</td>
+                        </tr>
+                        <tr>
+                            <th scope="col">Programme</th>
+                            <td>@user.programme</td>
+                        </tr>
+                        <tr>
+                            <th scope="col">Gender</th>
+                            <td>@user.gender</td>
+                        </tr>
+                        <tr>
+                            <th scope="col">User Role</th>
+                            <td>@user.userRole</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="padding-top: 20px;">
+                    <button style="width: 400px;" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#updateUser">
+                        Edit User
+                    </button>
+                    <button style="width: 400px;" type="button" class="btn btn-danger" data-bs-toggle="modal"
+                        data-bs-target="#staticBackdrop">
+                        Delete User
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    }
+    else
+    {
+        <p><em>Loading Student Details...</em></p> <br>
+
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int? id { get; set; }
+    private User? user;
+    private string getUrl = "http://localhost:5077/api/users/by-id";
+
+    // placeholders for updating the user
+    private string? FirstName { get; set; }
+    private string? LastName { get; set; }
+    private string? Programme { get; set; }
+    private string? UserRole { get; set; }
+    private string? Gender { get; set; }
+
+
+
+    private class User
+    {
+        public int id { get; set; }
+        public required string firstName { get; set; }
+        public required string lastName { get; set; }
+        public string? email { get; set; }
+        public string? referenceNumber { get; set; }
+        public string? programme { get; set; }
+        public string? userRole { get; set; }
+        public string? gender { get; set; }
+        public DateTime? DateCreated { get; set; } = DateTime.Now;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadStudentDetails();
+    }
+
+    private async Task LoadStudentDetails()
+    {
+        try
+        {
+            var response = await Http.GetStringAsync($"{getUrl}/{id}");
+            user = JsonSerializer.Deserialize<User>(response);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Failed to load student details: {e.Message}");
+        }
+    }
+
+    private void onUpdateStudent()
+    {
+
+    }
+
+    private void onDeleteUser()
+    {
+
+    }
+
+}

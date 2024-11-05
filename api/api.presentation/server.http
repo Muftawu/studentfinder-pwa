@@ -1,0 +1,19 @@
+###
+GET http://localhost:5077/api/users
+
+###
+GET http://localhost:5077/api/users/by-id/2
+
+###
+GET http://localhost:5077/api/users/by-name/angel
+
+###
+POST http://localhost:5077/api/users
+Content-Type: application/json
+
+{
+   "firstName" : "Richard",
+   "lastName" : "Hans",
+   "userId": "",
+   "userType" : 3
+}
