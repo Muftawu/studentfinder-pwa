@@ -20,5 +20,11 @@ namespace api.domain
             return UserEmail.ToLower();
         }
 
+        public static string GenerateUserId()
+        {
+            Guid userId = Guid.NewGuid();
+            return userId.ToString();
+        }
+
     }
 }

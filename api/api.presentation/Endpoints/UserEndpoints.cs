@@ -10,7 +10,7 @@ public static class UserEndpoints
 
     public static RouteGroupBuilder MapUserEndpoints(this RouteGroupBuilder group)
     {
-        group.MapGet("/users/by-id/{Id}", async (IUserService _userService, int Id) =>
+        group.MapGet("/users/by-id/{Id}", async (IUserService _userService, string Id) =>
         {
             var user = await _userService.GetUserById(Id);
             if (user is null) return Results.NotFound($"User with {Id} not found");
@@ -34,15 +34,12 @@ public static class UserEndpoints
 
         group.MapPost("/users", async (IUserService _userService, User user) =>
         {
-            user.ReferenceNumber = Utilities.GenerateReferenceNumber();
-            user.Email = Utilities.GenerateEmail(user.FirstName, user.LastName);
-            user.DateCreated = DateTime.Now;
-            
+            user.Email = Utilities.GenerateEmail(user.FirstName, user.LastName);            
             await _userService.CreateUser(user);
             return Results.CreatedAtRoute(GetUserById, new { Id = user.Id }, user);
         });
 
-        group.MapDelete("/users/{Id}", async (IUserService _userService, int Id) =>
+        group.MapDelete("/users/{Id}", async (IUserService _userService, string Id) =>
         {
             await _userService.DeleteUser(Id);
             return Results.NoContent();

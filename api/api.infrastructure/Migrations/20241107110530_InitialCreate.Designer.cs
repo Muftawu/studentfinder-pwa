@@ -12,7 +12,7 @@ using api.infrastructure;
 namespace api.infrastructure.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20241105054632_InitialCreate")]
+    [Migration("20241107110530_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -54,6 +54,11 @@ namespace api.infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ReferenceNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserRole")

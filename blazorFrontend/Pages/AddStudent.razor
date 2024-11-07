@@ -95,14 +95,17 @@
         try
         {
             var json = JsonSerializer.Serialize(newUser);
+            Console.WriteLine($"json data {json}");
             var content = new StringContent(json, Encoding.UTF8, "application/json");
+            Console.WriteLine($"content {content}");
 
             var response = await Http.PostAsync(postUrl, content);
+            Console.WriteLine($"response {response}");
 
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("Student added successfully.");
-                NavigationManager.NavigateTo("/students");
+                NavigationManager.NavigateTo("/users");
             }
             else
             {

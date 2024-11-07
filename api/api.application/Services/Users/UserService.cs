@@ -24,7 +24,7 @@ public class UserService : IUserService
     }
 
     // GetUserById
-    public Task<User> GetUserById(int Id)
+    public Task<User?> GetUserById(string Id)
     {
         return _dataRepository.GetUserById(Id);
     }
@@ -36,7 +36,7 @@ public class UserService : IUserService
     }
 
     // delete user
-     public Task DeleteUser(int Id)
+    public Task DeleteUser(string Id)
     {
         return _dataRepository.DeleteUser(Id);
     }

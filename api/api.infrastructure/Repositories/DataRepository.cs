@@ -27,9 +27,9 @@ public class DataRepository : IDataRepository
     }
 
     // get user by id
-     public async Task<User?> GetUserById (int Id)
+     public async Task<User?> GetUserById (string Id)
      {
-        return await _userDbContext.Users.FirstOrDefaultAsync(user => user.Id == Id);
+        return await _userDbContext.Users.FirstOrDefaultAsync(user => user.UserId == Id);
      }
 
      //get user by name
@@ -39,9 +39,9 @@ public class DataRepository : IDataRepository
      }
 
      // delete user
-     public async Task DeleteUser (int Id)
+     public async Task DeleteUser (string Id)
      {
-        var user = await  _userDbContext.Users.FirstOrDefaultAsync(user => user.Id == Id);
+        var user = await  _userDbContext.Users.FirstOrDefaultAsync(user => user.UserId == Id);
         if (user is null) return;
         _userDbContext.Users.Remove(user);
         await _userDbContext.SaveChangesAsync();

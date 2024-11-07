@@ -1,4 +1,4 @@
-﻿@page "/students"
+﻿@page "/users"
 @inject HttpClient Http
 
 <PageTitle>All Students</PageTitle>
@@ -10,7 +10,7 @@
 @if (users == null)
 {
     <p><em>Loading...</em></p> <br>
-    @* <p><em>Please Navigate to this <a href="/add">Create New Student</a> page to add Students</em></p> *@
+    <p><em>Please Navigate to this <a href="/add">Create New Student</a> page to add Students</em></p>
 }
 else
 {
@@ -52,7 +52,6 @@ else
 
 @code {
     private List<User>? users;
-
     private class User
     {
         public int Id { get; set; }
@@ -62,7 +61,7 @@ else
         public string? ReferenceNumber { get; set; }
         public string? Programme { get; set; }
         public string? UserRole { get; set; }
-        public DateTime? DateCreated { get; set; } = DateTime.Now;
+        public DateTime? DateCreated { get; set; }
     }
 
     protected override async Task OnInitializedAsync()

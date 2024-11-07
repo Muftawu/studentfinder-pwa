@@ -5,8 +5,12 @@ namespace api.application;
 public interface IDataRepository
 {
    Task<List<User>> AllUsers();
+
    Task CreateUser(User user);
-   Task<User?> GetUserById(int Id);
+
+   Task<User?> GetUserById(string Id);
+
    Task<List<User>> GetUserByName(string name);
-   Task DeleteUser(int Id);
+
+   Task DeleteUser(string Id);
 }

@@ -26,14 +26,14 @@
 @if (!string.IsNullOrWhiteSpace(searchItem))
 {
     <div class="list-group" style="width: 650px; padding-top: 50px;">
-        <p style="text-align: center;">Search Results for "@searchItem"</p>
+        <p style="text-align: center; font-size: large;">Search Results for "@searchItem" (@(users.Count))</p>
         @foreach (var user in users)
         {
-            <a @onclick="() => NavigateToStudentInfo(user.id)" class="list-group-item list-group-item-action" aria-current="true"
-                style="margin-bottom: 20px; border-width: 1px;">
+            <a @onclick="() => NavigateToStudentInfo(user.userId)" class="list-group-item list-group-item-action" aria-current="true"
+                style="margin-bottom: 20px; border-width: 1px; cursor: pointer;">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">@user.firstName @user.lastName</h5> <br>
-                    <small>3 days ago</small>
+                    <small>@user.email</small>
                 </div>
                 <small class="mb-1">@user.programme</small>
 
@@ -57,6 +57,7 @@ else
         public int id { get; set; }
         public required string firstName { get; set; }
         public required string lastName { get; set; }
+        public required string userId { get; set; }
         public string? email { get; set; }
         public string? referenceNumber { get; set; }
         public string? programme { get; set; }
@@ -79,7 +80,7 @@ else
         users = new List<User>(); // Ensure users is never null
     }
     }
-    private void NavigateToStudentInfo(int userId)
+    private void NavigateToStudentInfo(string userId)
         {
             NavigationManager.NavigateTo($"/student-info/{userId}");
         }

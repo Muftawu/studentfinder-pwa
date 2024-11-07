@@ -2,7 +2,7 @@
 GET http://localhost:5077/api/users
 
 ###
-GET http://localhost:5077/api/users/by-id/2
+GET http://localhost:5077/api/users/by-id/a0c8b6bd-afcc-46de-a50e-732e75aa8e6f
 
 ###
 GET http://localhost:5077/api/users/by-name/angel
@@ -12,8 +12,12 @@ POST http://localhost:5077/api/users
 Content-Type: application/json
 
 {
-   "firstName" : "Richard",
-   "lastName" : "Hans",
-   "userId": "",
-   "userType" : 3
+    "firstName":"James",
+    "lastName":"Cordon",
+    "programme":"Music and Arts",
+    "userRole":"Student",
+    "gender":"Male"
 }
+
+###
+DELETE http://localhost:5077/api/users/a0c8b6bd-afcc-46de-a50e-732e75aa8e6f
